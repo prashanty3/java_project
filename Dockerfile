@@ -1,17 +1,9 @@
-# Build stage
-FROM maven:3.9.11-openjdk-21 AS builder
-WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
-
-# Runtime stage
 FROM openjdk:21-jdk-slim
-WORKDIR /app
-COPY --from=builder /app/target/task-manager-backend-0.0.1-SNAPSHOT.jar app.jar
 
-# Create non-root user
-RUN groupadd -r spring && useradd -r -g spring spring
-USER spring
+WORKDIR /app
+
+# Copy the built JAR (note the correct name from your pom.xml)
+COPY target/tasks-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
